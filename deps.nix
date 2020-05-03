@@ -32,11 +32,38 @@ rec {
     # - change build/codegen.sh's shebang to /usr/bin/env bash
     # - comment out the 'yajl' function call in _minimal() of build/dev.sh
     src = fetchFromGitHub {
-      owner = "abathur";
+      owner = "oilshell";
       repo = "oil";
-      rev = "0f8b51518690db74470da041eb5fd104d1c90e23";
-      sha256 = "0bpg6jq3nnx23hrxs4jg03vgkcxdbqgc36qjq3hhzrwlc0bgysw3";
+      rev = "ea80cdad7ae1152a25bd2a30b87fe3c2ad32394a";
+      sha256 = "0pxn0f8qbdman4gppx93zwml7s5byqfw560n079v68qjgzh2brq2";
     };
+
+    # TODO: not sure why I'm having to set this for nix-build...
+    #       can anyone tell if I'm doing something wrong?
+    SOURCE_DATE_EPOCH=315532800;
+
+    /*
+    Not sure if there's a better way to do this, but I'm taking over the
+    unpack phase because the Oil shell's directory structure isn't
+    Python-package friendly--each oil subdir with an __init__.py ends up as
+    an unprefixed package. Custom phase unpacks the oil shell into a sub-dir
+    oil/source/. Patch phase adds oil/{setup.py,MANIFEST.in}.
+    */
+    unpackPhase = ''
+      mkdir oil
+      cd oil
+      unpackFile $src
+      chmod -R u+w source
+    '';
+
+    # These aren't, strictly speaking, nix/nixpkgs specific, but I've had hell
+    # upstreaming them.
+    patches = [
+      ./0001-add_setup_py.patch
+      ./0002-add_MANIFEST_in.patch
+      ./0003-fix_codegen_shebang.patch
+      ./0004-disable-internal-py-yajl-for-nix-built.patch
+    ];
 
     buildInputs = [ readline cmark py-yajl makeWrapper ];
 
@@ -45,16 +72,20 @@ rec {
     # runtime deps
     propagatedBuildInputs = with python27.pkgs; [ python27 six typing ];
 
-    doCheck = true;
+    doCheck = false;
     dontStrip = true;
 
     preBuild = ''
+      pushd source
       build/dev.sh all
+      popd
     '';
 
     # Patch shebangs so Nix can find all executables
     postPatch = ''
+      pushd source
       patchShebangs asdl build core doctools frontend native oil_lang
+      popd
     '';
 
     _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
