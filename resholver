@@ -10,6 +10,10 @@ import logging
 from collections import defaultdict
 from distutils.spawn import find_executable
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", logging.WARNING))
+# logging.basicConfig(filename='example.log', filemode='w', level=logging.DEBUG)
+
 # NOTE:
 #   All of the below are imports from oil. Try to keep careful notes here on
 #   what is being used from each Oil module. Oil is still changing very
@@ -57,11 +61,6 @@ from mycpp.mylib import tagswitch  # only in find_dynamic_token
 
 executables = dict()
 resolved_scripts = dict()
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", logging.WARNING))
-# logging.basicConfig(filename='example.log', filemode='w', level=logging.DEBUG)
-
 allowed_varsubs = set()
 # allowed_varsubs = {"HOME", "PWD"}
 
