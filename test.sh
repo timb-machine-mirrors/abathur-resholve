@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-
+set -o errexit
 # we package oil and force a namespace on it;
 # we want some sense that its packages aren't
 # leaking out

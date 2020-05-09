@@ -42,20 +42,6 @@ rec {
     #       can anyone tell if I'm doing something wrong?
     SOURCE_DATE_EPOCH=315532800;
 
-    /*
-    Not sure if there's a better way to do this, but I'm taking over the
-    unpack phase because the Oil shell's directory structure isn't
-    Python-package friendly--each oil subdir with an __init__.py ends up as
-    an unprefixed package. Custom phase unpacks the oil shell into a sub-dir
-    oil/source/. Patch phase adds oil/{setup.py,MANIFEST.in}.
-    */
-    unpackPhase = ''
-      mkdir oil
-      cd oil
-      unpackFile $src
-      chmod -R u+w source
-    '';
-
     # These aren't, strictly speaking, nix/nixpkgs specific, but I've had hell
     # upstreaming them.
     patches = [
@@ -76,22 +62,12 @@ rec {
     dontStrip = true;
 
     preBuild = ''
-      pushd source
       build/dev.sh all
-      popd
-    '';
-
-    # fabricate path for oil's packages/modules to find each other for test
-    preCheck = ''
-      OIL_DEV="$(pwd)/source"
-      export PYTHONPATH="$PYTHONPATH:$OIL_DEV"
     '';
 
     # Patch shebangs so Nix can find all executables
     postPatch = ''
-      pushd source
       patchShebangs asdl build core doctools frontend native oil_lang
-      popd
     '';
 
     _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -17,27 +17,27 @@ index 00000000..ed7189af
 +#!/usr/bin/env python2
 +from setuptools import setup, find_packages, Extension
 +
-+posix_ = Extension("posix_", sources=["source/native/posixmodule.c"])
++posix_ = Extension("posix_", sources=["native/posixmodule.c"])
 +line_input = Extension(
 +    "line_input",
-+    sources=["source/native/line_input.c"],
++    sources=["native/line_input.c"],
 +    undef_macros=["NDEBUG"],
 +    libraries=["readline"],
 +)
-+fastlex = Extension("fastlex", sources=["source/native/fastlex.c"], undef_macros=["NDEBUG"])
-+libc = Extension("libc", sources=["source/native/libc.c"], undef_macros=["NDEBUG"])
++fastlex = Extension("fastlex", sources=["native/fastlex.c"], undef_macros=["NDEBUG"])
++libc = Extension("libc", sources=["native/libc.c"], undef_macros=["NDEBUG"])
 +
 +setup(
 +    name="oil",
 +    version="0.8",
 +    description="A new unix shell",
-+    package_dir={"oil": "source"},
-+    packages=["oil"],
++    package_dir={"oil": ""},
++    packages=["oil"] + ["oil."+x for x in find_packages()],
 +    include_package_data=True,
 +    # For posix_methods.def
-+    include_dirs=["source/build/oil-defs", "source/_devbuild/gen"],  # posix_ & fastlex
++    include_dirs=["build/oil-defs", "_devbuild/gen"],  # posix_ & fastlex
 +    ext_modules=[posix_, line_input, fastlex, libc],
-+    scripts=["source/bin/oil.py", "source/bin/osh_eval.py", "source/bin/osh_parse.py"],
++    scripts=["bin/oil.py", "bin/osh_eval.py", "bin/osh_parse.py"],
 +)
 --
 2.25.1

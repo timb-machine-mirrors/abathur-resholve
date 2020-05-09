@@ -9,8 +9,8 @@ Subject: [PATCH] disable internal py-yajl for nix-built
 
 diff --git a/build/dev.sh b/build/dev.sh
 index baadc975..89a5ea3d 100755
---- a/source/build/dev.sh
-+++ b/source/build/dev.sh
+--- a/build/dev.sh
++++ b/build/dev.sh
 @@ -279,7 +279,7 @@ _minimal() {
    posix_
 

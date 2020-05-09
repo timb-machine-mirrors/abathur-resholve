@@ -9,8 +9,8 @@ Subject: [PATCH] patch shebang
 
 diff --git a/build/codegen.sh b/build/codegen.sh
 index 45995841..2198d79f 100755
---- a/source/build/codegen.sh
-+++ b/source/build/codegen.sh
+--- a/build/codegen.sh
++++ b/build/codegen.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#!/usr/bin/env bash
