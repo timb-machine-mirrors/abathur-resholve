@@ -3,7 +3,7 @@
 git,
 
 # oil deps
-readline, re2c, cmark, python27, file,
+readline, re2c, cmark, python27, file, glibcLocales
 }:
 
 rec {
@@ -95,6 +95,8 @@ rec {
     '';
 
     _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
+
+    LOCALE_ARCHIVE = stdenv.lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
 
     meta = {
       description = "A new unix shell";
