@@ -72,13 +72,19 @@ rec {
     # runtime deps
     propagatedBuildInputs = with python27.pkgs; [ python27 six typing ];
 
-    doCheck = false;
+    doCheck = true;
     dontStrip = true;
 
     preBuild = ''
       pushd source
       build/dev.sh all
       popd
+    '';
+
+    # fabricate path for oil's packages/modules to find each other for test
+    preCheck = ''
+      OIL_DEV="$(pwd)/source"
+      export PYTHONPATH="$PYTHONPATH:$OIL_DEV"
     '';
 
     # Patch shebangs so Nix can find all executables
