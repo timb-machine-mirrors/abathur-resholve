@@ -2,6 +2,7 @@
 set -x
 test_future_perfection() {
     echo "nothing up my sleeve"
+
     {
         # set -x
         type jq openssl
