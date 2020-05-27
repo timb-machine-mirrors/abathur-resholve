@@ -80,9 +80,9 @@ in stdenv.mkDerivation {
     mkdir $out
   '';
   doCheck = true;
-  buildInputs = [ resholved.resholved bat coreutils ];
+  buildInputs = [ resholved.resholved bat ];
   propagatedBuildInputs = [ test_module3 ];
-  checkInputs = [ bats ];
+  checkInputs = [ bats coreutils ];
 
   RESHOLVE_PATH = "${stdenv.lib.makeBinPath resolveTimeDeps}";
 
