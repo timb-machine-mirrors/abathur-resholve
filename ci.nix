@@ -63,6 +63,7 @@ let
     scripts = [ "conjure.sh" ];
     inputs = [ test_module1 ];
 
+    # TODO: try install -Dt $out/bin $src/yadm
     installPhase = ''
       mkdir -p $out/bin
       install conjure.sh $out/bin/conjure.sh
@@ -79,7 +80,7 @@ in stdenv.mkDerivation {
     mkdir $out
   '';
   doCheck = true;
-  buildInputs = [ resholved.resholved bat ];
+  buildInputs = [ resholved.resholved bat coreutils ];
   propagatedBuildInputs = [ test_module3 ];
   checkInputs = [ bats ];
 
