@@ -82,7 +82,7 @@ in stdenv.mkDerivation {
   doCheck = true;
   buildInputs = [ resholved.resholved bat ];
   propagatedBuildInputs = [ test_module3 ];
-  checkInputs = [ bats coreutils ];
+  checkInputs = [ bats ];
 
   RESHOLVE_PATH = "${stdenv.lib.makeBinPath resolveTimeDeps}";
 
@@ -92,7 +92,7 @@ in stdenv.mkDerivation {
     ./demo
 
     printf "\033[33m============================= resholver Nix demo ===============================\033[0m\n"
-    env -i $(type -p conjure.sh)
+    env -i PATH=${coreutils}/bin $(type -p conjure.sh)
     bat --paging=never --color=always $(type -p conjure.sh openssl.sh libressl.sh)
   '';
 }
