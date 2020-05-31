@@ -4,4 +4,4 @@ os:
   - linux
 
 script:
-  - nix-build ci.nix
+  - nix-build --show-trace ci.nix
